@@ -1,5 +1,6 @@
 from PIL import Image
 
+
 # loads an image
 def load_image(loc):
     # loads the image from the file 'loc'
@@ -12,6 +13,7 @@ def load_image(loc):
     width, height = img.size
 
     return pixels, width, height
+
 
 # converts the pixels of the image to blocks
 def convert_to_blocks(pixels):
@@ -48,6 +50,7 @@ def convert_to_blocks(pixels):
 
     return blocks
 
+
 # replaces each block with an ascii-character
 def convert_to_ascii(blocks):
     # array that stores the characters
@@ -59,36 +62,25 @@ def convert_to_ascii(blocks):
         chars.append([])
 
         for x in range(int(width / block_width)):
-            # adds a specified character for different block-values to the character-array
-            # black
-            if blocks[y][x] == 0:
-                chars[y].append("@")
-            # charcoal
-            elif blocks[y][x] <= 32:
-                chars[y].append("#")
-            # darkgray
-            elif blocks[y][x] > 32 and blocks[y][x] <= 64:
-                chars[y].append("8")
-            # mediumgray
-            elif blocks[y][x] > 64 and blocks[y][x] <= 96:
-                chars[y].append("&")
-            # medium
-            elif blocks[y][x] > 96 and blocks[y][x] <= 128:
-                chars[y].append("o")
-            # gray
-            elif blocks[y][x] > 128 and blocks[y][x] <= 160:
-                chars[y].append(":")
-            # slategray
-            elif blocks[y][x] > 192 and blocks[y][x] <= 224:
-                chars[y].append("*")
-            # lightgray
-            elif blocks[y][x] > 224 and blocks[y][x] < 256:
-                chars[y].append(".")
-            # white
-            else:
-                chars[y].append(" ")
+            # array with possible characters
+            # [lesser_value, max_value, character]
+            # "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,"^`'. "
+            characters = [[-1, 0, "@"], [0, 32, "#"], [32, 64, "W"], [64, 96, "&"], [96, 128, "6"], [128, 160, "o"],
+                          [160, 192, "*"], [192, 224, ":"], [224, 255, "."], [255, 256, " "]]
+
+
+
+
+
+            # loops through the array with possible characters
+            for c in characters:
+                # checks if the value of the block is in range of the character c
+                if c[0] < blocks[y][x] <= c[1]:
+                    # adds character c to the character-array
+                    chars[y].append(c[2])
 
     return chars
+
 
 # prints the character-array to the console
 def print_chars(chars):
@@ -97,6 +89,7 @@ def print_chars(chars):
             print(chars[y][x], end="")
 
         print()
+
 
 # saves the character-array to a file
 def save_chars(location):
@@ -113,6 +106,7 @@ def save_chars(location):
 
     # closes the file
     file.close()
+
 
 # used for the main-loop, programm ends if is_runnig == 0
 is_running = 1
@@ -154,7 +148,7 @@ while is_running == 1:
 
         save_chars(location)
 
-        print("> saved image to ", location)
+        print("Successfully saved image to ", location + "!")
 
     # ends the programm
     if action == "end":
